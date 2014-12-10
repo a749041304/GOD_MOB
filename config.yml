@@ -1,0 +1,93 @@
+names:
+  - "50:爬行者"
+  - "51:骷髅"
+  - "52:蜘蛛"
+  - "54:僵尸"
+  - "55:史莱姆"
+  - "56:恶魂"
+  - "57:僵尸猪人"
+  - "58:末影人"
+  - "59:洞穴蜘蛛"
+  - "60:蠢虫"
+  - "61:烈焰人"
+  - "62:岩浆怪"
+levels:
+  level1:
+    range: 80
+    height: 60
+    name: "&a[&7简单&a]&r"
+    health: "20-50"
+    damage: "5-10"
+    exp: "10-20"
+    money: "5-10"
+    drops:
+      - ""
+  level2:
+    range: 50
+    height: 60
+    name: "&a[&6普通&a]&r"
+    health: "50-100"
+    damage: "10-20"
+    exp: "10-30"
+    money: "10-20"
+    drops:
+      - ""
+  level3:
+    range: 20
+    height: 100
+    name: "&a[&b高级&a]&r"
+    health: "100-200"
+    damage: "20-30"
+    exp: "20-50"
+    money: "20-30"
+    drops:
+      - "20:gjj"
+      - "20:gjm"
+      - "20:gjy"
+      - "20:gjk"
+      - "20:gjx"
+  level4:
+    range: 10
+    height: 130
+    name: "&a[&c传说&a]&r"
+    health: "200-300"
+    damage: "30-40"
+    exp: "30-100"
+    money: "30-40"
+    drops:
+      - "15:csj"
+      - "15:csm"
+      - "15:csy"
+      - "15:csk"
+      - "15:csx"
+  level5:
+    range: 5
+    height: 180
+    name: "&a[&5史诗&a]&r"
+    health: "300-500"
+    damage: "40-50"
+    exp: "40-130"
+    money: "40-50"
+    drops:
+      - "10:ssj"
+      - "10:ssm"
+      - "10:ssy"
+      - "10:ssk"
+      - "10:ssx"
+  level6:
+    range: 3
+    height: 200
+    name: "&a[&0王者&a]&r"
+    health: "500-1000"
+    damage: "50-100"
+    exp: "50-200"
+    money: "50-100"
+    drops:
+      - "5:wzj"
+      - "5:wzm"
+      - "5:wzy"
+      - "5:wzk"
+      - "5:wzx"
+lang_1: "&a你杀死了&d{mob}&c,&a获得了&d{money}&aG币&c,&d{exp}&a经验"
+lang_2: "&a怪物掉落了&r{drop}"
+lang_3: "&a保存成功"

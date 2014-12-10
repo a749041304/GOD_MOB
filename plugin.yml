@@ -1,0 +1,6 @@
+name: Mob
+main: org.jason.mob.Main
+version: 1.0
+
+commands:
+  mob:
