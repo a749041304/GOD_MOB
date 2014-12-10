@@ -94,7 +94,7 @@ public class Main extends JavaPlugin implements Listener{
 				w.setTime(18000);
 			}
 		}, 0, 60 * 20);
-		setupEconomy ();
+		setupEconomy (); 
 		System.out.println("[" + getName() + "]" + " " + getName() + "²å¼þÒÑ¿ªÆô");
 	}
 
