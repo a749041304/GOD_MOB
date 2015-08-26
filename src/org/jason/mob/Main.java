@@ -28,6 +28,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -45,7 +46,7 @@ public class Main extends JavaPlugin implements Listener{
 	
 	private static Main instance;
 	
-	private List <Integer> dropHashCode = new ArrayList <Integer> ();
+	private List <ItemMeta> dropHashCode = new ArrayList <ItemMeta> ();
 	
 	public static Main getInstance () {
 		return instance;
@@ -116,40 +117,49 @@ public class Main extends JavaPlugin implements Listener{
 					sendMsg(p, getLang(3));
 				}
 			}
+			return true;
 		}
 		return false;
 	}
 	
 	public void loadMonsters () {
-		for (int i = 6;i >= 1; i--) {
-			String name = this.config.getString("levels.level" + i + ".name").replace("&", "¡ì");
+		for (int i = 4;i >= 1; i--) {
+			String prefix = this.config.getString("levels.level" + i + ".name").replace("&", "¡ì");
 			int range = this.config.getInt("levels.level" + i + ".range");
 			int height = this.config.getInt("levels.level" + i + ".height");
-			String health = this.config.getString("levels.level" + i + ".health");
-			String damage = this.config.getString("levels.level" + i + ".damage");
-			String exp = this.config.getString("levels.level" + i + ".exp");
-			String money = this.config.getString("levels.level" + i + ".money");
-			List <String> drops = this.config.getStringList("levels.level" + i + ".drops");
+			int level = i;
 			List <String> skills = this.config.getStringList("levels.level" + i + ".skills");
-			Monster monster = new Monster(name, range, height, health, damage, exp, money, drops, skills);
-			monsters.add(monster);
+			for (String key : this.config.getConfigurationSection("levels.level" + i + ".mobs").getKeys(false)) {
+				String name = this.config.getString("levels.level" + i + ".mobs." + key + ".name").replace("&", "¡ì");
+				String health = this.config.getString("levels.level" + i + ".mobs." + key + ".health");
+				String damage = this.config.getString("levels.level" + i + ".mobs." + key + ".damage");
+				String exp = this.config.getString("levels.level" + i + ".mobs." + key + ".exp");
+				String money = this.config.getString("levels.level" + i + ".mobs." + key + ".money");
+				int id = Integer.parseInt(key);
+				List <String> drops = this.config.getStringList("levels.level" + i + ".mobs." + key + ".drops");
+				Monster monster = new Monster(prefix, range, height, id, level, name, health, damage, exp, money, drops, skills);
+				monsters.add(monster);
+			}
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onCreatureSpawn (CreatureSpawnEvent e) {
 		if (e.getEntity() instanceof org.bukkit.entity.Monster) {
 			LivingEntity le = e.getEntity();
 			if (!le.getWorld().getName().equalsIgnoreCase("fb")) return;
+			int id = le.getType().getTypeId();
 			Location loc = le.getLocation();
 			int range = this.random.nextInt(100);
 			for (Monster monster : this.monsters) {
-				if (range < monster.getRange() && loc.getY() > monster.getHeight()) {
-					setEntity(le, monster);
-					return;
+				if (id == monster.getId()) {
+					if (range < monster.getRange() && loc.getY() > monster.getHeight()) {
+						setEntity(le, monster);
+						return;
+					}
 				}
 			}
-			setEntity(le, this.monsters.get(this.monsters.size() - 1));
 		}
 	}
 	
@@ -251,7 +261,7 @@ public class Main extends JavaPlugin implements Listener{
 								if (range < r) {
 									ItemStack item = Items.get(s.split(":")[1]);
 									e.getDrops().add(item);
-									dropHashCode.add(item.hashCode());
+									dropHashCode.add(item.getItemMeta());
 									sendMsg(p, getLang(2).replace("{drop}", item.getItemMeta().getDisplayName()));
 									return;
 								}
@@ -269,12 +279,11 @@ public class Main extends JavaPlugin implements Listener{
 		Player p = e.getPlayer();
 		for (ItemStack is : Items.getAll()) {
 			if (item.hasItemMeta()) {
-				String name = item.getItemMeta().getDisplayName();
-				if (name != null) {
-					if (name.equals(is.getItemMeta().getDisplayName())) {
-						if (dropHashCode.contains(item.hashCode())) {
+				if (is != null && is.hasItemMeta() && is.getItemMeta().getDisplayName() != null) {
+					if (dropHashCode.contains(item.getItemMeta())) {
+						if (item.getItemMeta().equals(is.getItemMeta())) {
 							sendItemMsg(p, is);
-							dropHashCode.remove(new Integer(item.hashCode()));
+							dropHashCode.remove(item.getItemMeta());
 						}
 					}
 				}
@@ -282,10 +291,9 @@ public class Main extends JavaPlugin implements Listener{
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	public void setEntity (LivingEntity le, Monster monster) {
 		le.setCustomNameVisible(true);
-		le.setCustomName(monster.getName() + getMobName (le.getType().getTypeId()));
+		le.setCustomName(monster.getPrefix() + monster.getName());
 		le.setMaxHealth(random(monster.getHealth()));
 		le.setHealth(le.getMaxHealth()); 
 	}

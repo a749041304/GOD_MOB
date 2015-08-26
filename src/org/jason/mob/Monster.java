@@ -3,9 +3,12 @@ package org.jason.mob;
 import java.util.List;
 
 public class Monster {
-	private String name;
+	private String prefix;
 	private int range;
 	private int height;
+	private int id;
+	private int level;
+	private String name;
 	private String health;
 	private String damage;
 	private String exp;
@@ -16,9 +19,12 @@ public class Monster {
 	public Monster() {
 	}
 	
-	public Monster (String name, int range, int height, String health, String damage, String exp, String money, List <String> drops, List <String> skills) {
-		this.name = name;
+	public Monster (String prefix, int range, int height, int id, int level, String name, String health, String damage, String exp, String money, List <String> drops, List <String> skills) {
+		this.prefix = prefix;
 		this.range = range;
+		this.id = id;
+		this.level = level;
+		this.name = name;
 		this.height = height;
 		this.health = health;
 		this.damage = damage;
@@ -28,11 +34,29 @@ public class Monster {
 		this.skills = skills;
 	}
 	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public int getLevel() {
+		return level;
+	}
+	public void setLevel(int level) {
+		this.level = level;
+	}
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public String getPrefix() {
+		return prefix;
+	}
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
 	}
 	public int getRange() {
 		return range;
